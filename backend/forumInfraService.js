@@ -9,63 +9,63 @@ function userFromForum(object){
     return user;
 }
 
-function user(userId){
+function userById(userId){
     return new Promise(function(resolve, reject){
+        if(!Number.isInteger(userId) || userId < 1){
+            resolve({error:"bad_id"});
+            return;
+        }
         request.get("https://forumas.rls.lt/api/index.php?core/members/"+userId+"/&key=cf493945637f05c7b9c4ad2ad7b74737",
             function(error, respose, body){
                 if(error === null){
                     let data = JSON.parse(body);
-                    if(typeof data.errorMessage !== undefined){
-                        reject({
-                            text: 'user not found'
-                        });
+                    if(typeof data.errorMessage !== 'undefined'){
+                        if(data.errorMessage === 'INVALID_ID')
+                            resolve({error: "no_user"});
+                        else
+                            resolve({error: "bad_request"});
                         return;
                     }
                     let userData = userFromForum(data);
                     if(userData === null){
-                        reject({
-                            text: 'user not found'
-                        });
+                        resolve({error:"no_user"});
                         return;
                     }
                     resolve(userData);
                 }
-                else
-                    reject({
-                        text: 'user not found'
-                    });
+                else{
+                    resolve({error:"no_response"});
+                }
         });
     });
 }
 function userList(page){
     return new Promise(function(resolve, reject){
-        request.get("https://forumas.rls.lt/api/index.php?core/members/&key=cf493945637f05c7b9c4ad2ad7b74737",
+        if(!Number.isInteger(page) || page < 1){
+            resolve({error:"bad_page"});
+            return;
+        }
+        request.get("https://forumas.rls.lt/api/index.php?core/members/&page="+page+"&key=cf493945637f05c7b9c4ad2ad7b74737",
             function(error, respose, body){
                 if(error === null){
                     let data = JSON.parse(body);
-                    console.log(typeof data.errorMessage);
-                    if(typeof data.errorMessage != undefined){
-                        reject({
-                            text: 'failed to read users list'
-                        });
+                    if(typeof data.errorMessage !== 'undefined'){
+                        resolve({error: 'bad_request'});
                         return;
                     }
                     let list = data.results;
-                    data.results = [];
                     list.forEach(function(element){
                         let user = userFromForum(element);
                         data.results.push(user);
                     });
-                    resolve(data);
+                    resolve(data.results);
                 }
                 else
-                    reject({
-                        text: 'failed to read users list'
-                    });
+                    resolve({error: "no_response"});
         });
     });
 }
 module.exports = {
-    user,
+    userById,
     userList
 };
