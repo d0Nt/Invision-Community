@@ -20,6 +20,10 @@ function getUserById(id){
                 resolve(forumUser);
             }
             else{
+                if(database.isDeleted(databaseUser)){
+                    resolve({error: 'no_user'});
+                    return;
+                }
                 if(typeof forumUser.error === 'undefined'){
                     databaseUser.joined=forumUser.joined;
                     if(databaseUser.lastVisit<forumUser.lastVisit)
@@ -84,17 +88,30 @@ function createUser(userData){
             return;
         }
         let result = await database.insert(userData);
-        if(typeof result.error === 'undefined'){
-            result.success = true;
-            resolve(result);
-        }
-        else{
-            response.success = false;
-            resolve(result);
-        }
+        resolve(result);
     });
 }
+function deleteUser(id){
+    return new Promise(async function(resolve){
+        if(!userEntity.validateFields({id: id})){
+            resolve({error: "bad_id"});
+            return;
+        }
+        let user = await getUserById(id);
+        if(typeof user.error !== 'undefined'){
+            resolve({error: user.error});
+            return;
+        }
+        if(database.isDeleted(user)){
+            resolve({error: 'no_user'});
+            return;
+        }
+        let result = await database.deleteUser(id);
+        resolve(result);
+    }); 
+}
 module.exports = {
+    deleteUser,
     getUserById,
     updateUser,
     createUser

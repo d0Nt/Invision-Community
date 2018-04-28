@@ -10,6 +10,9 @@ let database = [
         photoUrl: "https://forumas.rls.lt/uploads/monthly_2017_07/wtf-i-just-read.gif.8f70b36780b43dc9e375659d4e4e3994.gif"
     }
 ];
+function isDeleted(userData){
+    return typeof userData.deleted !== undefined && userData.deleted === true;
+}
 async function getById(id){
     let result = await database.filter(function(user) {
         return user.id == id;
@@ -49,8 +52,27 @@ async function update(id, userData){
     });
     return {};
 }
+async function deleteUser(id){
+    let dbUser = await getById(parseInt(id));
+    if(dbUser === null){
+        //add deleted user record to database
+        database.push({id: parseInt(id), deleted: true});
+        return {};
+    }
+    if(isDeleted(dbUser)){
+        return {error: 'no_user'};
+    }
+    //delete user
+    database = await database.filter(function(user) {
+        return user.id === id;
+    });
+    database.push({id: parseInt(id), deleted: true});
+    return {};
+}
 module.exports = {
     getById,
     insert,
-    update
+    update,
+    isDeleted,
+    deleteUser
 };

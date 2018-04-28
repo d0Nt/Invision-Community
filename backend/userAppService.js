@@ -31,8 +31,8 @@ express.app.put('/api/user/:id',(req,res) => {
     apiResponse(users.updateUser(req.params.id, req.body), res)
 });
 
-express.app.delete('/user/:id',(req,res) => {
-    res.status(200).send('delete user '+req.params.id);
+express.app.delete('/api/user/:id',(req,res) => {
+    apiResponse(users.deleteUser(req.params.id), res)
 });
 
 function apiResponse(promise, res){
