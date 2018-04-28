@@ -10,66 +10,44 @@ let database = [
         photoUrl: "https://forumas.rls.lt/uploads/monthly_2017_07/wtf-i-just-read.gif.8f70b36780b43dc9e375659d4e4e3994.gif"
     }
 ];
-function removeId(id){
-    database = database.filter(function(record){
-        return record.id !== id;
-      });
-}
-function getById(id){
-    return new Promise(function(resolve, reject){
-        let result = database.filter(function(user) {
-            return user.id == id;
-          });
-        if(result.length != 1)
-            resolve(null);
-        else{
-          resolve(result[0]);
-        }
+async function getById(id){
+    let result = await database.filter(function(user) {
+        return user.id == id;
     });
+    if(result.length != 1)
+        return null;
+    else{
+        return result[0];
+    }
 }
-function update(id, userData){
-    return new Promise(function(resolve, reject){
-        if(!userEntity.validateFields(userData)){
-            reject({error: 'invalid_data'});
-            return;
-        }
-        getById(id)
-        .then(function(dbUser){
-            if(dbUser === null){
-                reject({error: 'no_user'});
-                return;
-            }
-            //update with new record
-            Object.keys(userData).forEach(function(key){
-                dbUser[key] = userData[key];
-            });
-            console.log(dbUser);
-            resolve({});
-        });
-    });
+async function insert(user){
+    if(!userEntity.validate(user)){
+        return {error: 'invalid_data'};
+    }
+    let dbUser = await getById(user.id);
+    if(dbUser !== null){
+        return {error: 'user_exist'};
+    }
+    if(typeof user.posts === 'undefined')
+        user.posts = 0;
+    //database insert
+    database.push(user);
+    return {};
 }
-function insert(user){
-    return new Promise(function(resolve, reject){
-        if(!userEntity.validate(user)){
-            reject({error: 'invalid_data'});
-            return;
-        }
-        getById(user.id)
-            .then(function(response){
-                if(response !== null){
-                    reject({error: 'user_exist'});
-                    return;
-                }
-                if(typeof user.posts === 'undefined')
-                    user.posts = 0;
-                //database insert
-                database.push(user);
-                resolve({});
-            })
-            .catch(function(response){
-                reject({error: 'unknown'});
-            });
+
+async function update(id, userData){
+    if(!userEntity.validateFields(userData)){
+        return {error: 'invalid_data'};
+    }
+    let dbUser = await getById(parseInt(id));
+    if(dbUser === null){
+        return {error: 'no_user'};
+    }
+    //update database
+    Object.keys(userData).forEach(function(key){
+        dbUser[key] = userData[key];
     });
+    return {};
 }
 module.exports = {
     getById,

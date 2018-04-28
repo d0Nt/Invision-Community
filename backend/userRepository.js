@@ -3,115 +3,95 @@ const forumApi = require('./forumInfraService');
 const database = require('./userDatabase');
 
 function getUserById(id){
-    return new Promise(function(resolve, reject){
-        Promise.all([forumApi.userById(parseInt(id)), database.getById(parseInt(id))])
-        .then(function(result){
-            let forumUser = result[0];
-            let databaseUser = result[1];
-            if(typeof forumUser.error !== 'undefined'  && databaseUser === null){
-                reject(forumUser);
+    return new Promise(async function(resolve, reject){
+        if(!userEntity.validateFields({id: id})){
+            resolve({error: "bad_id"});
+            return;
+        }
+        let data = {};
+        let forumUser = await forumApi.userById(parseInt(id));
+        let databaseUser = await database.getById(parseInt(id));
+        if(typeof forumUser.error !== 'undefined'  && databaseUser === null){
+            resolve(forumUser);
+            return;
+        }
+        else{
+            if(databaseUser === null){
+                resolve(forumUser);
             }
             else{
-                if(databaseUser === null){
-                    resolve(forumUser);
+                if(typeof forumUser.error === 'undefined'){
+                    databaseUser.joined=forumUser.joined;
+                    if(databaseUser.lastVisit<forumUser.lastVisit)
+                        databaseUser.lastVisit = forumUser.lastVisit;
+                    databaseUser.posts += forumUser.posts;
+                    databaseUser.photoUrl = forumUser.photoUrl;
                 }
-                else{
-                    if(typeof forumUser.error === 'undefined'){
-                        databaseUser.joined=forumUser.joined;
-                        if(databaseUser.lastVisit<forumUser.lastVisit)
-                            databaseUser.lastVisit = forumUser.lastVisit;
-                        databaseUser.posts += forumUser.posts;
-                        databaseUser.photoUrl = forumUser.photoUrl;
-                    }
-                    resolve(databaseUser);
-                }
+                resolve(databaseUser);
             }
-            
-        })
-        .catch(function(result){
-            reject({
-                success: true,
-                text: result.text
-            });
-        });
+        }
     });
 }
 
 function updateUser(id, userData){
-
-    /*
-    return new Promise(function(resolve, reject){
-        getUserById(id)
-        .then(function(user){
-            if(typeof user.error !== 'undefined'){
-                reject({error: user.error});
-                return;
-            }
-            if(typeof userData === 'undefined'){
-                reject({error: 'no_data'});
-                return;
-            }
-            if(typeof userData.id !== 'undefined'){
-                reject({
-                    error: 'forbidden_change',
-                    param: 'id'
-                });
-                return;
-            }
-            if(!userEntity.validateFields(userData)){
-                reject({error: 'invalid_data'});
-                return;
-            }
-            database.getById(id)
-            .then(function(dbUser){
-                if(dbUser != null){// user already exist in our database
-                    database.update(id, dbUser)
-                    .then(function(response){
-                        response.success = true;
-                        resolve(response);
-                    })
-                    .catch(function(response){
-                        response.success = false;
-                        reject(response);
-                    });   
-                } 
-                else{// when user not exit yet
-                    database.insert(userData);
-                }
-            }).catch(function(response){
-            });         
-        })
-        .catch(function(data){
-            reject({error: data});
-        });
-    });*/
+    return new Promise(async function(resolve, reject){
+        if(!userEntity.validateFields({id: id})){
+            resolve({error: "bad_id"});
+            return;
+        }
+        if(!userEntity.validateFields(userData)){
+            resolve({error: 'invalid_data'});
+            return;
+        }
+        let user = await getUserById(id);
+        if(typeof user.error !== 'undefined'){
+            resolve(user);
+            return;
+        }
+        if(typeof userData === 'undefined'){
+            resolve({error: 'no_data'});
+            return;
+        }
+        if(typeof userData.id !== 'undefined' && user.id !== userData.id){
+            resolve({
+                error: 'forbidden_change',
+                param: 'id'
+            });
+            return;
+        }
+        let dbUser = await database.getById(id);
+        if(dbUser === null){//insert if not exist
+            await database.insert(user);
+        }
+        let result = await database.update(id, userData);
+        resolve(result);
+    });
 }
 
 function createUser(userData){
-    return new Promise(function(resolve, reject){
+    return new Promise(async function(resolve, reject){
         if(!userEntity.validate(userData)){
-            reject({error: 'invalid_data'});
+            resolve({error: 'invalid_data'});
             return;
         }
-        getUserById(userData.id)
-        .then(function(result){         
-            reject({error: 'user_exist'});                  
-        })
-        .catch(function(data){
-            if(data.error !== 'no_user'){
-                reject({error: data.error});
-                return;
-            }
-            database.insert(userData)
-            .then(function(response){
-                response.success = true;
-                resolve(response);
-            })
-            .catch(function(response){
-                response.success = false;
-                reject(response);
-            });
-        });
+        let user = await getUserById(userData.id);
+        if(typeof user.error !== 'undefined' && user.error !== 'no_user'){
+            resolve({error: user.error});
+            return;
+        }
+        if(typeof user.id !== 'undefined'){
+            resolve({error: 'user_exist'});
+            return;
+        }
+        let result = await database.insert(userData);
+        if(typeof result.error === 'undefined'){
+            result.success = true;
+            resolve(result);
+        }
+        else{
+            response.success = false;
+            resolve(result);
+        }
     });
 }
 module.exports = {
