@@ -10,17 +10,7 @@ express.app.get('/api/user/:id', (req,res) => {
 });
 
 express.app.get('/api/users/:page',(req,res) => {
-    forumApi.userList(parseInt(req.params.page))
-    .then(function(response){
-        response.success = true;
-        res.status(200).send(response);
-    })
-    .catch(function(response){
-        response.success = false;
-        let status = response.code;
-        delete response.code;
-        res.status(status).send(response);
-    });
+    apiResponse(users.usersList(parseInt(req.params.page)), res);
 });
 
 express.app.post('/api/user',(req,res) => {

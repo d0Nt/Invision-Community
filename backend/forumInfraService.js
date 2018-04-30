@@ -39,33 +39,6 @@ function userById(userId){
         });
     });
 }
-function userList(page){
-    return new Promise(function(resolve, reject){
-        if(!Number.isInteger(page) || page < 1){
-            resolve({error:"bad_page"});
-            return;
-        }
-        request.get("https://forumas.rls.lt/api/index.php?core/members/&page="+page+"&key=cf493945637f05c7b9c4ad2ad7b74737",
-            function(error, respose, body){
-                if(error === null){
-                    let data = JSON.parse(body);
-                    if(typeof data.errorMessage !== 'undefined'){
-                        resolve({error: 'bad_request'});
-                        return;
-                    }
-                    let list = data.results;
-                    list.forEach(function(element){
-                        let user = userFromForum(element);
-                        data.results.push(user);
-                    });
-                    resolve(data.results);
-                }
-                else
-                    resolve({error: "no_response"});
-        });
-    });
-}
 module.exports = {
-    userById,
-    userList
+    userById
 };

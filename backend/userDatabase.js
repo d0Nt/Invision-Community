@@ -23,6 +23,9 @@ async function getById(id){
         return result[0];
     }
 }
+async function usersList(page){
+    return await database;
+}
 async function insert(user){
     if(!userEntity.validate(user)){
         return {error: 'invalid_data'};
@@ -71,6 +74,7 @@ async function deleteUser(id){
 }
 module.exports = {
     getById,
+    usersList,
     insert,
     update,
     isDeleted,
