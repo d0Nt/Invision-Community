@@ -1,0 +1,38 @@
+body{
+    margin:0px;
+    padding: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.header{
+    margin: 0 20px;
+    padding: 0 30px;
+    height: 70px;
+    background-color: #333742;
+}
+.logo{
+    float:left;
+    font-size: 25px;
+    font-weight: bold;
+    color: #0093F1;
+    line-height: 65px;
+}
+.navigation{
+    font-size: 17px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 65px;
+    float: right;
+}
+.navigation .item{
+    display: inline;
+    margin: 0 20px;
+    -webkit-transition: color 0.5s;
+    transition: color 0.5s;
+}
+.navigation .item:hover{
+    color:#0093F1;
+    cursor: pointer;
+}
+.logo.white{
+    color: #fff;
+}

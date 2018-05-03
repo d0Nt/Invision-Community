@@ -22,10 +22,12 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "css-loader": "^0.28.11",
     "express": "^4.16.2",
     "joi": "^13.1.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "style-loader": "^0.21.0"
   }
 }

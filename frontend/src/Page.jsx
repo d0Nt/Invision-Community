@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from './components/Header.jsx';
 
 export default class Page extends React.Component {
     constructor(props) {
@@ -6,7 +7,9 @@ export default class Page extends React.Component {
     }
     render() {
         return (
-            <div>Template</div>
+            <div>
+                <Header />
+            </div>
         );
     }
 }
