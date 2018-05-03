@@ -14,8 +14,13 @@ function getUserById(id){
             return;
         }
         let forumUser = await forumApi.userById(parseInt(id));
-        if(typeof forumUser.error === 'undefined')
-            console.log(await createUser(forumUser));
+        if(typeof forumUser.error === 'undefined'){
+            let response = await createUser(forumUser);
+            if(typeof response === 'undefined'){
+                resolve(response);
+                return;
+            }
+        }
         resolve(forumUser);
     });
 }
@@ -68,7 +73,7 @@ function createUser(userData){
             return;
         }
         user = forumApi.userById(userData.id);
-        if(typeof user.error !== 'undefined'){
+        if(typeof user.error === 'undefined' || user.error !== "no_user"){
             resolve({error: user.error});
             return;
         }

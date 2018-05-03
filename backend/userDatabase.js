@@ -14,6 +14,7 @@ function isDeleted(userData){
     return typeof userData.deleted !== undefined && userData.deleted === true;
 }
 async function getById(id){
+    //db select
     let result = await database.filter(function(user) {
         return user.id == id;
     });
@@ -24,7 +25,15 @@ async function getById(id){
     }
 }
 async function usersList(page){
-    return await database;
+    let list;
+    //database select
+    let dbSelect = await database;
+    dbSelect.forEach(element => {
+        if(list.length >= 25)
+            break;
+        list.push(element);
+    });
+    return list;
 }
 async function insert(user){
     if(!userEntity.validate(user)){
