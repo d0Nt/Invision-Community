@@ -1,0 +1,21 @@
+.popup-background{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .5);
+}
+.popup{
+    color: #fff;
+    width: 300px;
+    min-height: 20px;
+    background-color: #333742;
+    position: fixed;
+    margin: auto;
+    left: 50%;
+    padding: 5px;
+    top: 100px;
+    margin-left: -150px;
+    z-index: 1;
+}
