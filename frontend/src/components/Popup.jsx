@@ -25,7 +25,10 @@ export default class Popup extends React.Component {
     renderFields(){
         if(this.props.type === "findUser")
             return (
-                <input type="number" placeholder="Id to find" ref="id"/>
+                <div>
+                    <div>Enter user id to see more info about him</div><br />
+                    <input type="number" placeholder="Id to find" ref="id"/>
+                </div>
             );
             
     }
@@ -35,6 +38,7 @@ export default class Popup extends React.Component {
                 <div className="popup">
                     <div className="error">{this.state.error_text}</div>
                     {this.renderFields()}
+                    <br />
                     <input type="submit" onClick={this.onPopupSubmit} />
                 </div>
                 <div className="popup-background" onClick={this.onPopupHide}>

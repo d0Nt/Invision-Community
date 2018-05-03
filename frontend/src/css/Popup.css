@@ -8,6 +8,7 @@
     z-index: 1;
 }
 .popup{
+    text-align: center;
     color: #fff;
     width: 300px;
     min-height: 20px;
@@ -19,4 +20,16 @@
     top: 100px;
     margin-left: -150px;
     z-index: 2;
+}
+input[type="text"], input[type="number"]{
+    padding: 10px;
+    width: 90%;
+    border-radius: 1px;
+    border: 0px;
+}
+input[type="submit"]{
+    padding: 10px;
+    background-color: #0093F1;
+    border:0;
+    color: #fff;
 }
