@@ -1,0 +1,52 @@
+.content{
+    border: 1px solid black;
+    margin: 0 20px;
+    margin-top: 10px;
+    height: 250px;
+    overflow: hidden;
+}
+.cover{
+    height: 100%;
+    position: relative;
+}
+.cover img{
+    background-size: cover;
+}
+.info-bar{
+    padding-left: 100px;
+    position: absolute;
+    display: flex;
+    bottom:0;
+    width: calc(100% - 100px);
+    height: 45px;
+    background-color: rgba(0,0,0,.5);
+}
+.info-bar .item{
+    color: #fff;
+    display: inline-block;
+    margin: auto;
+}
+.cover img.avatar{
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 1px solid rgba(0,0,0,.5);
+    left: 50px;
+    bottom: 15px;
+}
+.cover .user{
+    position: absolute;
+    bottom: 90px;
+    left: 200px;
+    color: #fff;
+}
+.user .name{
+    color: #0093F1;
+    text-shadow: 0 0 3px rgb(0, 130, 211), 0 0 5px black;
+    font-size: 25px;
+    font-weight: bold;
+}
+.user .group{
+    font-weight: bold;
+    text-shadow: 0 0 3px rgb(0, 130, 211), 0 0 5px black;
+}
