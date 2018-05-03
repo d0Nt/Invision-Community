@@ -25,13 +25,12 @@ async function getById(id){
     }
 }
 async function usersList(page){
-    let list;
+    let list = [];
     //database select
     let dbSelect = await database;
-    dbSelect.forEach(element => {
-        if(list.length >= 25)
-            break;
+    dbSelect.some(element => {
         list.push(element);
+        return list.length >= 25;
     });
     return list;
 }

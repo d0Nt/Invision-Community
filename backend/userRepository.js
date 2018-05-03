@@ -15,7 +15,7 @@ function getUserById(id){
         }
         let forumUser = await forumApi.userById(parseInt(id));
         if(typeof forumUser.error === 'undefined'){
-            let response = await createUser(forumUser);
+            let response = await database.insert(forumUser);
             if(typeof response === 'undefined'){
                 resolve(response);
                 return;

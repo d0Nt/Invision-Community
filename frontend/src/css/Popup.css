@@ -4,7 +4,8 @@
     height: 100%;
     top:0;
     left: 0;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, .7);
+    z-index: 1;
 }
 .popup{
     color: #fff;
@@ -17,5 +18,5 @@
     padding: 5px;
     top: 100px;
     margin-left: -150px;
-    z-index: 1;
+    z-index: 2;
 }

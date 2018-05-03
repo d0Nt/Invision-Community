@@ -1,5 +1,6 @@
 import React from 'react';
 import './../css/Header.css';
+import Popup from './Popup.jsx';
 
 export default class Header extends React.Component {
     constructor(props) {
@@ -12,8 +13,8 @@ export default class Header extends React.Component {
                     <span className="logo white">Invision</span>Users
                 </div>
                 <div className="navigation">
-                    <div className="item">Find user</div>
-                    <div className="item">All users</div>
+                    <div className="item" onClick={() => this.props.onNavigationClick("findUser")}>Find user</div>
+                    <div className="item" onClick={() => this.props.onNavigationClick("allUsers")}>All users</div>
                 </div>
             </div>
         );
