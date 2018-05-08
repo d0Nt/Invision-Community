@@ -10,13 +10,16 @@
     position: relative;
 }
 .cover img{
-    background-size: cover;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: auto;
+    height: 250px;
 }
 .info-bar{
     padding-left: 100px;
     position: absolute;
     display: flex;
-    bottom:0;
+    bottom:5px;
     width: calc(100% - 100px);
     height: 45px;
     background-color: rgba(0,0,0,.5);
@@ -49,4 +52,22 @@
 .user .group{
     font-weight: bold;
     text-shadow: 0 0 3px rgb(0, 130, 211), 0 0 5px black;
+}
+.buttons.edit{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.button{
+    display: inline-block;
+    background: black;
+    opacity: 0.5;
+    margin-left: 10px;
+    color: #fff;
+    padding: 10px;
+    transition: all 0.5s;
+}
+.button:hover{
+    opacity: 0.8;
+    cursor: pointer;
 }

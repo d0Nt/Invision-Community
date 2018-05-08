@@ -75,9 +75,9 @@ async function deleteUser(id){
     }
     //delete user
     database = await database.filter(function(user) {
-        return user.id === id;
+        return user.id != id;
     });
-    database.push({id: parseInt(id), deleted: true});
+    //database.push({id: parseInt(id), deleted: true});
     return {};
 }
 module.exports = {

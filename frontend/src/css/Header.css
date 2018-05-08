@@ -1,6 +1,7 @@
 body{
     margin:0px;
     padding: 0px;
+    background-color: #494c533d;
     font-family: Arial, Helvetica, sans-serif;
 }
 .header{
@@ -31,6 +32,9 @@ body{
 }
 .navigation .item:hover{
     color:#0093F1;
+    cursor: pointer;
+}
+.logo:hover{
     cursor: pointer;
 }
 .logo.white{

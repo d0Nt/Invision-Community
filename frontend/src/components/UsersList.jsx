@@ -21,7 +21,7 @@ export default class UsersList extends React.Component {
     }
     render() {
         return (
-            <div className="content">
+            <div className="content full">
                 <table>
                     <thead>
                     <tr>

@@ -9,12 +9,13 @@ export default class Header extends React.Component {
     render() {
         return (
             <div className="header">
-                <div className="logo">
+                <div className="logo" onClick={() => this.props.onNavigationClick({request:"mainPage"})}>
                     <span className="logo white">Invision</span>Users
                 </div>
                 <div className="navigation">
-                    <div className="item" onClick={() => this.props.onNavigationClick("findUser")}>Find user</div>
-                    <div className="item" onClick={() => this.props.onNavigationClick("allUsers")}>All users</div>
+                    <div className="item" onClick={() => this.props.onNavigationClick({request:"newUser"})}>Create new user</div>
+                    <div className="item" onClick={() => this.props.onNavigationClick({request:"findUser"})}>Find user</div>
+                    <div className="item" onClick={() => this.props.onNavigationClick({request:"allUsers"})}>All users</div>
                 </div>
             </div>
         );

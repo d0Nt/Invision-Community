@@ -72,7 +72,7 @@ function createUser(userData){
             resolve({error: 'user_exist'});
             return;
         }
-        user = forumApi.userById(userData.id);
+        user = await forumApi.userById(userData.id);
         if(typeof user.error === 'undefined' || user.error !== "no_user"){
             resolve({error: user.error});
             return;
@@ -86,7 +86,7 @@ function deleteUser(id){
             resolve({error: "bad_id"});
             return;
         }
-        let user = await database.user(id);
+        let user = await database.getById(id);
         if(user === null){
             resolve({error: "no_user"});
             return;

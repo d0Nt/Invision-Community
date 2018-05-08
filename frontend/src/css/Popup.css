@@ -7,6 +7,9 @@
     background-color: rgba(0, 0, 0, .7);
     z-index: 1;
 }
+.error{
+    color:#ff0000;
+}
 .popup{
     text-align: center;
     color: #fff;
@@ -16,7 +19,7 @@
     position: fixed;
     margin: auto;
     left: 50%;
-    padding: 5px;
+    padding: 10px;
     top: 100px;
     margin-left: -150px;
     z-index: 2;
@@ -32,4 +35,5 @@ input[type="submit"]{
     background-color: #0093F1;
     border:0;
     color: #fff;
+    margin-right:5px;
 }

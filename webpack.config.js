@@ -7,6 +7,9 @@ module.exports = {
     path: path.join(__dirname, 'frontend', 'dist'),
     filename: 'bundle.js'
   },
+  resolve:{
+    extensions: ['.js', '.jsx']
+  },
   module: {
     rules: [
       {

@@ -29,7 +29,6 @@ function apiResponse(promise, res){
     promise
     .then(function(response){
         if(typeof response.error === 'undefined'){
-            response.success = true;
             res.status(200).send(response);
         }
         else
@@ -38,66 +37,55 @@ function apiResponse(promise, res){
 }
 
 function apiError(response, res){
-    console.log(response);
     switch(response.error){
         case 'user_exist':
             res.status(400).send({
-                success:false,
-                text: 'User already exist'
+                error: 'User already exist'
             });
             break;
         case 'no_user':
             res.status(404).send({
-                success:false,
-                text: 'No user found'
+                error: 'No user found'
             });
             break;
         case 'no_data':
             res.status(400).send({
-                success:false,
-                text: 'Bad request body'
+                error: 'Bad request body'
             });
             break;
         case 'bad_request':
             res.status(400).send({
-                success:false,
-                text: 'Bad request to server'
+                error: 'Bad request to server'
             });
             break;
         case 'bad_id':
             res.status(400).send({
-                success: false,
-                text: 'Bad user id'
+                error: 'Bad user id'
             });
             break;
         case 'bad_page':
             res.status(400).send({
-                success:false,
-                text: 'Bad page number'
+                error: 'Bad page number'
             });
             break;
         case 'invalid_data':
             res.status(400).send({
-                success:false,
-                text: 'Bad user data'
+                error: 'Bad user data'
             });
             break;
         case 'no_response':
             res.status(500).send({
-                success:false,
-                text: 'Could not connect to remote server'
+                error: 'Could not connect to remote server'
             });
             break;
         case 'forbidden_change':
             res.status(400).send({
-                success: false,
-                text: response.param+' is forbidden to change'
+                error: response.param+' is forbidden to change'
             });
             break;
         default:
             res.status(500).send({
-                success:false,
-                text: 'Unknown error'
+                error: 'Unknown error'
             });
             break;
     }
