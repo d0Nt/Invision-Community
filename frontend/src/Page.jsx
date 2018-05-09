@@ -50,16 +50,19 @@ export default class Page extends React.Component {
                 joined: new Date().toISOString(),
                 lastVisit: new Date().toISOString(),
                 posts: fields.posts.value,
-                photoUrl: fields.avatar.value,
-                coverPhotoUrl: fields.cover.value
+                photoUrl: fields.avatar.value
             };
+            if(fields.cover.value !== null && fields.cover.value > 1) 
+                registerData.coverPhotoUrl = fields.cover.value;
             this.newUser(registerData)
             .then((data) =>{
+                this.setState({userId: parseInt(registerData.id)});
                 this.hidePopup();
             });
         }else if(data.type === "deleteUser"){
             this.deleteUser(this.state.userId)
             .then((data) =>{
+                this.setState({userId: 0});
                 this.hidePopup();
             });
         }else if(data.type === "editUser"){
@@ -71,12 +74,13 @@ export default class Page extends React.Component {
                 joined: new Date().toISOString(),
                 lastVisit: new Date().toISOString(),
                 posts: fields.posts.value,
-                photoUrl: fields.avatar.value,
-                coverPhotoUrl: fields.cover.value
+                photoUrl: fields.avatar.value
             };
+            if(fields.cover.value !== null && fields.cover.value > 1) 
+                updateData.coverPhotoUrl = fields.cover.value;
             this.updateUser(updateData)
             .then((data) =>{
-                this.setState({id: parseInt(this.state.userId)});
+                this.setState({userId: 0});
                 this.hidePopup();
             });
         }

@@ -1,36 +1,39 @@
 const userEntity = require('../lib/userEntity');
-let database = [
-    {
-        id: 1,
-        name: "d0Nt",
-        primaryGroup: 4,
-        joined: "2012-03-27T18:15:01Z",
-        lastVisit: "2018-04-29T19:19:46Z",
-        posts: 1,
-        photoUrl: "https://forumas.rls.lt/uploads/monthly_2017_07/wtf-i-just-read.gif.8f70b36780b43dc9e375659d4e4e3994.gif"
-    }
-];
-function isDeleted(userData){
-    return typeof userData.deleted !== undefined && userData.deleted === true;
-}
+const mongoose = require('mongoose');
+mongoose.connect("mongodb://localhost/test");
+let userSchema = mongoose.Schema({
+    id: Number,
+    name: String,
+    primaryGroup: Number,
+    joined: { type: Date, default: Date.now },
+    lastVisit: { type: Date, default: Date.now },
+    posts: { type: Number, min: 0, default: 0 },
+    photoUrl: String,
+    coverPhotoUrl: String
+});
+let User = mongoose.model("User", userSchema);
+
 async function getById(id){
     //db select
-    let result = await database.filter(function(user) {
-        return user.id == id;
-    });
+    let result = await User.find({id: id}).lean();
     if(result.length != 1)
         return null;
     else{
-        return result[0];
+        result = result[0];
+        delete result._id;
+        delete result.__v;
+        return result;
     }
 }
 async function usersList(page){
     let list = [];
     //database select
-    let dbSelect = await database;
+    let dbSelect = await User.find().lean();
     dbSelect.some(element => {
+        delete element._id;
+        delete element.__v;
         list.push(element);
-        return list.length >= 25;
+        return false;
     });
     return list;
 }
@@ -44,8 +47,8 @@ async function insert(user){
     }
     if(typeof user.posts === 'undefined')
         user.posts = 0;
-    //database insert
-    database.push(user);
+    let data = new User(user);
+    data.save();
     return {};
 }
 
@@ -57,27 +60,15 @@ async function update(id, userData){
     if(dbUser === null){
         return {error: 'no_user'};
     }
-    //update database
-    Object.keys(userData).forEach(function(key){
-        dbUser[key] = userData[key];
-    });
+    await User.update({id: id}, {$set:userData})
     return {};
 }
 async function deleteUser(id){
     let dbUser = await getById(parseInt(id));
     if(dbUser === null){
-        //add deleted user record to database
-        database.push({id: parseInt(id), deleted: true});
-        return {};
-    }
-    if(isDeleted(dbUser)){
         return {error: 'no_user'};
     }
-    //delete user
-    database = await database.filter(function(user) {
-        return user.id != id;
-    });
-    //database.push({id: parseInt(id), deleted: true});
+    await User.find({id: id}).remove();
     return {};
 }
 module.exports = {
@@ -85,6 +76,5 @@ module.exports = {
     usersList,
     insert,
     update,
-    isDeleted,
     deleteUser
 };
